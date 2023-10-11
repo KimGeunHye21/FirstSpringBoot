@@ -10,6 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Controller
 public class MemberController {
@@ -42,5 +46,14 @@ public class MemberController {
         model.addAttribute("member", memberEntity);
 
         return "members/show";
+    }
+
+    @GetMapping("/members")
+    public String index(Model model){
+
+        List<Member> memberEntityList = (List<Member>)memberRepository.findAll();
+        model.addAttribute("memberList", memberEntityList);
+
+        return "members/index";
     }
 }
