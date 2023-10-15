@@ -4,15 +4,33 @@ import com.example.firstproject.entity.Article;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
-@AllArgsConstructor
 @ToString
+@AllArgsConstructor
 public class ArticleForm {
-    private Long id;
-    private String title;
-    private String content;
+    Long id;
+    String title;
+    String content;
 
+    /*
+    public ArticleForm(String title, String content) {
+        System.out.println("id=null start");
+        this.id=null;
+        this.title=title;
+        this.content=content;
+        System.out.println("id=null done");
+    }
+
+
+    public ArticleForm(Long id, String title, String content) {
+        System.out.println("id=id start");
+        this.id=id;
+        this.title=title;
+        this.content=content;
+        System.out.println("id=id done");
+    }
+    */
     public Article toEntity() {
-        return new Article(null, title, content);
+        return new Article(id, title, content);
     }
 }
 
