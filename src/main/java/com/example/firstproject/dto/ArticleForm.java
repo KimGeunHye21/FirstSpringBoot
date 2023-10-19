@@ -29,6 +29,8 @@ public class ArticleForm {
         System.out.println("id=id done");
     }
     */
+
+    //db로 글을 입력해야됨
     public Article toEntity() {
         return new Article(id, title, content);
     }
