@@ -13,6 +13,12 @@
 <body>
 <!-- navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    {{#msg}}
+        <div class="alert alert-primary alert-dismissible">
+            {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-lebel="Close"></button>
+        </div>
+    {{/msg}}
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
