@@ -56,4 +56,31 @@ public class MemberController {
 
         return "members/index";
     }
+
+    @GetMapping("/members/{id}/edit")
+    public String edit(@PathVariable Long id, Model model) {
+
+        // 수정할 데이터 가져오기
+        Member memberEntity = memberRepository.findById(id).orElse(null);
+
+        // 모델에 데이터 등록하기
+        model.addAttribute("member", memberEntity);
+
+        // 뷰 페이지 설정하기
+        return "members/edit";
+    }
+
+    @PostMapping("/members/update")
+    public String update(MemberForm form){
+        log.info(form.toString());
+
+        Member memberEntity = form.toEntity();
+        log.info(memberEntity.toString());
+
+        Member target = memberRepository.findById(memberEntity.getId()).orElse(null);
+        if (target != null) memberRepository.save(memberEntity);
+
+        return "redirect:/members/"+memberEntity.getId();
+    }
+
 }
