@@ -1,3 +1,3 @@
-insert into article(id, title, content) values(1, 'aaaa', '1111');
-insert into article(id, title, content) values(2, 'bbbb', '2222');
-insert into article(id, title, content) values(3, 'cccc', '3333');
+insert into coffee(name, price) values('아메리카노', '4500');
+insert into coffee(name, price) values('라떼', '5000');
+insert into coffee(name, price) values('카페모카', '5500');
