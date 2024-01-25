@@ -5,6 +5,7 @@ import com.example.firstproject.dto.CoffeeForm;
 import com.example.firstproject.entity.Coffee;
 import com.example.firstproject.repository.ArticleRepository;
 import com.example.firstproject.repository.CoffeeRepository;
+import com.example.firstproject.service.CoffeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,60 +17,42 @@ import java.util.List;
 @RestController
 public class CoffeeApiController {
     @Autowired
-    private CoffeeRepository coffeeRepository;
+    private CoffeeService coffeeService;
 
     //GET
     @GetMapping("/api/coffees")
     public List<Coffee> index() {
-        return coffeeRepository.findAll();
+        return coffeeService.index();
     }
     @GetMapping("/api/coffees/{id}")
     public Coffee show(@PathVariable Long id) {
-        return coffeeRepository.findById(id).orElse(null);
+        return coffeeService.show(id);
     }
 
     //POST
     @PostMapping("/api/coffees")
-    public Coffee coffee(@RequestBody CoffeeForm dto) {
-        Coffee coffee = dto.toEntity();
-        return coffeeRepository.save(coffee);
+    public ResponseEntity<Coffee> coffee(@RequestBody CoffeeForm dto) {
+        Coffee created = coffeeService.create(dto);
+        return (created != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(created) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     //PATCH
     @PatchMapping("/api/coffees/{id}")
     public ResponseEntity<Coffee> update(@PathVariable Long id, @RequestBody CoffeeForm dto) {
-        //1. DTO -> 엔티티 변환하기
-        Coffee coffee = dto.toEntity();
-        log.info("id: {}, article: {}", id, coffee.toString());
-
-        //2. 타깃 조회하기
-        Coffee target = coffeeRepository.findById(id).orElse(null);
-
-        //3. 잘못된 요청 처리하기
-        if (target == null || id != coffee.getId()) {
-            log.info("잘못된 요청! id: {}, article: {}", id, coffee.toString());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-
-        //4. 업데이트 및 정상 응답(200)하기
-        target.patch(coffee);
-        Coffee update = coffeeRepository.save(target);
-        return ResponseEntity.status(HttpStatus.OK).body(update);
+        Coffee updated = coffeeService.update(id, dto);
+        return (updated != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(updated) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     //DELETE
     @DeleteMapping("/api/coffees/{id}")
     public ResponseEntity<Coffee> delete(@PathVariable Long id) {
-        //1. 대상 찾기
-        Coffee target = coffeeRepository.findById(id).orElse(null);
-
-        //2. 잘못된 요청 처리하기
-        if (target == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-
-        //3. 대상 삭제하기
-        coffeeRepository.delete(target);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        Coffee deleted = coffeeService.delete(id);
+        return (deleted != null) ?
+                ResponseEntity.status(HttpStatus.NO_CONTENT).build() :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }
